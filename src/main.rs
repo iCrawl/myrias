@@ -2,7 +2,7 @@ use actix_web::{middleware::Logger, web, App, HttpServer};
 use env_logger;
 use log::info;
 
-use myrias::router::{create_container, eval};
+use myrias::router::{cleanup, containers, create_container, eval};
 
 fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "myrias=info,actix_web=info");
@@ -15,6 +15,8 @@ fn main() -> std::io::Result<()> {
             .wrap(Logger::default())
             .route("/create_container", web::post().to(create_container))
             .route("/eval", web::post().to(eval))
+            .route("/containers", web::get().to(containers))
+            .route("/cleanup", web::post().to(cleanup))
     })
     .bind(addr)?
     .run()

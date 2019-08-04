@@ -2,33 +2,26 @@ use actix_web::{web, HttpResponse, Responder};
 use log::info;
 use serde::Deserialize;
 
-use crate::docker::docker_exec;
+use crate::docker::Docker;
 
 #[derive(Deserialize)]
 pub struct CreateContainerInput {
     language: String,
 }
 
-pub fn index(create: web::Json<CreateContainerInput>) -> impl Responder {
+pub fn start_container(create: &web::Json<CreateContainerInput>) {
     info!("Building container: myrias_{}", create.language);
-    docker_exec(&[
-        "run",
-        "--rm",
-        &format!("--name=myrias_{}", create.language),
-        "-u1000:1000",
-        "-w/tmp/",
-        "-dt",
-        "--net=none",
-        &format!("myrias_{}:latest", create.language),
-        "/bin/sh",
-    ]);
+    Docker::start_container(&create.language);
     info!("Built container: myrias_{}", create.language);
+}
 
+pub fn index(create: web::Json<CreateContainerInput>) -> impl Responder {
+    start_container(&create);
     info!(
         "Creating eval directory in container: myrias_{}",
         create.language
     );
-    docker_exec(&[
+    Docker::exec(&[
         "exec",
         &format!("myrias_{}", create.language),
         "mkdir",
@@ -43,7 +36,7 @@ pub fn index(create: web::Json<CreateContainerInput>) -> impl Responder {
         "Chmod eval directory to 711 in container: myrias_{}",
         create.language
     );
-    docker_exec(&[
+    Docker::exec(&[
         "exec",
         &format!("myrias_{}", create.language),
         "chmod",

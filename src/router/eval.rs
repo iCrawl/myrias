@@ -2,12 +2,12 @@ use actix_web::{web, HttpResponse, Responder};
 use log::info;
 use rustflake::Snowflake;
 use serde::{Deserialize, Serialize};
-use std::process::{Command, Stdio};
+use std::process::Command;
 use std::sync::{mpsc, mpsc::RecvTimeoutError};
 use std::thread;
 use std::time::Duration;
 
-use crate::docker::docker_exec;
+use crate::docker::Docker;
 
 #[derive(Deserialize)]
 pub struct EvalInput {
@@ -27,7 +27,7 @@ pub fn index(eval: web::Json<EvalInput>) -> impl Responder {
         "Creating unique eval folder in container: myrias_{}",
         eval.language
     );
-    docker_exec(&[
+    Docker::exec(&[
         "exec",
         &format!("myrias_{}", eval.language),
         "mkdir",
@@ -42,7 +42,7 @@ pub fn index(eval: web::Json<EvalInput>) -> impl Responder {
         "Chmod unique eval directory to 711 in container: myrias_{}",
         eval.language
     );
-    docker_exec(&[
+    Docker::exec(&[
         "exec",
         &format!("myrias_{}", eval.language),
         "chmod",
@@ -79,14 +79,11 @@ pub fn index(eval: web::Json<EvalInput>) -> impl Responder {
         Err(RecvTimeoutError::Timeout) => {
             info!("Eval timed out in container: myrias_{}", e);
             info!("Killing container: myrias_{}", e);
-            Command::new("docker")
-                .args(&["kill", &format!("myrias_{}", e)])
-                .stdin(Stdio::null())
-                .stdout(Stdio::null())
-                .stderr(Stdio::null())
-                .status()
-                .unwrap();
+            Docker::exec(&["kill", &format!("myrias_{}", e)]);
             info!("Killed container: myrias_{}", e);
+            info!("Restarting container: myrias_{}", e);
+            Docker::start_container(&e);
+            info!("Restarted container: myrias_{}", e);
 
             return HttpResponse::GatewayTimeout().into();
         }
@@ -104,7 +101,7 @@ pub fn index(eval: web::Json<EvalInput>) -> impl Responder {
     };
 
     info!("Removing unique eval folder in container: myrias_{}", e);
-    docker_exec(&[
+    Docker::exec(&[
         "exec",
         &format!("myrias_{}", e),
         "rm",
