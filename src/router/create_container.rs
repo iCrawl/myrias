@@ -9,14 +9,10 @@ pub struct CreateContainerInput {
     language: String,
 }
 
-pub fn start_container(create: &web::Json<CreateContainerInput>) {
+pub fn index(create: web::Json<CreateContainerInput>) -> impl Responder {
     info!("Building container: myrias_{}", create.language);
     Docker::start_container(&create.language);
     info!("Built container: myrias_{}", create.language);
-}
-
-pub fn index(create: web::Json<CreateContainerInput>) -> impl Responder {
-    start_container(&create);
     info!(
         "Creating eval directory in container: myrias_{}",
         create.language
