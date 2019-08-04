@@ -7,11 +7,15 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = "1.0.5"
-serde = "1.0.98"
+rocket = "0.4.2"
+serde = { version = "1.0.98", features = ["derive"] }
 log = "0.4.8"
-env_logger = "0.6.2"
 rustflake = "0.1.1"
+
+[dependencies.rocket_contrib]
+version = "0.4.2"
+default-features = false
+features = ["json"]
 
 [profile.release]
 lto = true

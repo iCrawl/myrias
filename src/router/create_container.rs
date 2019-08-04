@@ -1,5 +1,6 @@
-use actix_web::{web, HttpResponse, Responder};
 use log::info;
+use rocket::{http::Status, post};
+use rocket_contrib::json::Json;
 use serde::Deserialize;
 
 use crate::docker::Docker;
@@ -9,7 +10,8 @@ pub struct CreateContainerInput {
     language: String,
 }
 
-pub fn index(create: web::Json<CreateContainerInput>) -> impl Responder {
+#[post("/create_container", format = "json", data = "<create>")]
+pub fn index(create: Json<CreateContainerInput>) -> Status {
     info!("Building container: myrias_{}", create.language);
     Docker::start_container(&create.language);
     info!("Built container: myrias_{}", create.language);
@@ -44,5 +46,5 @@ pub fn index(create: web::Json<CreateContainerInput>) -> impl Responder {
         create.language
     );
 
-    HttpResponse::Created()
+    Status::Created
 }
