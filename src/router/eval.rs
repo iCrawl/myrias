@@ -1,5 +1,6 @@
 use actix_web::{web, HttpResponse, Responder};
 use log::info;
+use rustflake::Snowflake;
 use serde::{Deserialize, Serialize};
 use std::process::{Command, Stdio};
 use std::sync::{mpsc, mpsc::RecvTimeoutError};
@@ -20,6 +21,8 @@ struct DockerOutput {
 }
 
 pub fn index(eval: web::Json<EvalInput>) -> impl Responder {
+    let snowflake = Snowflake::default().generate();
+
     info!(
         "Creating unique eval folder in container: myrias_{}",
         eval.language
@@ -28,7 +31,7 @@ pub fn index(eval: web::Json<EvalInput>) -> impl Responder {
         "exec",
         &format!("myrias_{}", eval.language),
         "mkdir",
-        &format!("eval/{}", "test"),
+        &format!("eval/{}", &snowflake),
     ]);
     info!(
         "Created unique eval folder in container: myrias_{}",
@@ -44,7 +47,7 @@ pub fn index(eval: web::Json<EvalInput>) -> impl Responder {
         &format!("myrias_{}", eval.language),
         "chmod",
         "777",
-        &format!("eval/{}", "test"),
+        &format!("eval/{}", &snowflake),
     ]);
     info!(
         "Chmod' unique eval directory in container: myrias_{}",
@@ -60,7 +63,7 @@ pub fn index(eval: web::Json<EvalInput>) -> impl Responder {
                 .args(&[
                     "exec",
                     "-u1001:1001",
-                    "-w/tmp/eval/test",
+                    &format!("-w/tmp/eval/{}", &snowflake),
                     &format!("myrias_{}", eval.language),
                     "/bin/sh",
                     "/var/run/run.sh",
@@ -106,7 +109,7 @@ pub fn index(eval: web::Json<EvalInput>) -> impl Responder {
         &format!("myrias_{}", e),
         "rm",
         "-rf",
-        &format!("eval/{}", "test"),
+        &format!("eval/{}", &snowflake),
     ]);
     info!("Removed unique eval folder in container: myrias_{}", e);
 

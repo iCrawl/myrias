@@ -4,7 +4,7 @@ use log::info;
 
 use myrias::router::{create_container, eval};
 
-fn main() {
+fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "myrias=info,actix_web=info");
     env_logger::init();
 
@@ -16,8 +16,6 @@ fn main() {
             .route("/create_container", web::post().to(create_container))
             .route("/eval", web::post().to(eval))
     })
-    .bind(addr)
-    .unwrap()
+    .bind(addr)?
     .run()
-    .unwrap();
 }
