@@ -1,8 +1,10 @@
-use actix_web::{HttpResponse, Responder};
 use log::info;
+use rocket::get;
+use rocket_contrib::{json, json::JsonValue};
 use std::process::Command;
 
-pub fn index() -> impl Responder {
+#[get("/containers")]
+pub fn index() -> JsonValue {
     info!("Listing all myrias container");
     let output = Command::new("docker")
         .args(&["ps", "--filter", "name=myrias_", "--format", "{{.Names}}"])
@@ -16,8 +18,8 @@ pub fn index() -> impl Responder {
             .map(|x| x.trim().to_string())
             .collect()
     } else {
-        return HttpResponse::Ok().json([] as [String; 0]);
+        return json!([] as [String; 0]);
     };
 
-    HttpResponse::Ok().json(res)
+    json!(res)
 }

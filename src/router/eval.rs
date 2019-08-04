@@ -1,5 +1,9 @@
-use actix_web::{web, HttpResponse, Responder};
 use log::info;
+use rocket::{http::Status, post};
+use rocket_contrib::{
+    json,
+    json::{Json, JsonValue},
+};
 use rustflake::Snowflake;
 use serde::{Deserialize, Serialize};
 use std::process::Command;
@@ -9,18 +13,14 @@ use std::time::Duration;
 
 use crate::docker::Docker;
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct EvalInput {
     language: String,
     code: String,
 }
 
-#[derive(Serialize, Deserialize)]
-struct DockerOutput {
-    result: String,
-}
-
-pub fn index(eval: web::Json<EvalInput>) -> impl Responder {
+#[post("/eval", format = "json", data = "<eval>")]
+pub fn index(eval: Json<EvalInput>) -> Result<JsonValue, Status> {
     let snowflake = Snowflake::default().generate();
 
     info!(
@@ -85,10 +85,10 @@ pub fn index(eval: web::Json<EvalInput>) -> impl Responder {
             Docker::start_container(&e);
             info!("Restarted container: myrias_{}", e);
 
-            return HttpResponse::GatewayTimeout().into();
+            return Err(Status::GatewayTimeout);
         }
         Err(RecvTimeoutError::Disconnected) => {
-            return HttpResponse::InternalServerError().into();
+            return Err(Status::InternalServerError);
         }
     };
 
@@ -110,7 +110,5 @@ pub fn index(eval: web::Json<EvalInput>) -> impl Responder {
     ]);
     info!("Removed unique eval folder in container: myrias_{}", e);
 
-    HttpResponse::Ok().json(DockerOutput {
-        result: res.to_string(),
-    })
+    Ok(json!({ "result": res.to_string() }))
 }
