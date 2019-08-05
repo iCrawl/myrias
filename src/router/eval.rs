@@ -1,5 +1,5 @@
 use log::info;
-use rocket::{http::Status, post};
+use rocket::{http::Status, post, State};
 use rocket_contrib::{
     json,
     json::{Json, JsonValue},
@@ -12,6 +12,7 @@ use std::thread;
 use std::time::Duration;
 
 use crate::docker::Docker;
+use crate::Config;
 
 #[derive(Serialize, Deserialize)]
 pub struct EvalInput {
@@ -20,7 +21,11 @@ pub struct EvalInput {
 }
 
 #[post("/eval", format = "json", data = "<eval>")]
-pub fn index(eval: Json<EvalInput>) -> Result<JsonValue, Status> {
+pub fn index(eval: Json<EvalInput>, config: State<Config>) -> Result<JsonValue, Status> {
+    if !config.languages.contains(&eval.language) {
+        return Err(Status::NotFound);
+    }
+
     let snowflake = Snowflake::default().generate();
 
     info!(
