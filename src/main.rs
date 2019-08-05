@@ -12,10 +12,11 @@ fn main() {
         .mount(
             "/",
             routes![
+                router::languages::index,
+                router::create_container::index,
+                router::eval::index,
                 router::containers::index,
                 router::cleanup::index,
-                router::eval::index,
-                router::create_container::index
             ],
         )
         .launch();

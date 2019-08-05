@@ -16,6 +16,14 @@ TBD
 
 ## Endpoints
 
+### **GET** `/languages`
+List of enabled languages.
+Example response:
+
+```json
+["rust", "typescript"]
+```
+
 ### **POST** `/create_container`
 Creates a language container (if not already present).
 JSON payload with `language` key.
