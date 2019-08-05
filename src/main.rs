@@ -1,12 +1,14 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
-use myrias::router;
+use myrias::{router, Config};
 use rocket::routes;
 
 fn main() {
     std::env::set_var("ROCKET_CLI_COLORS", "off");
+    let config = Config::from_file("Config.toml");
 
     rocket::ignite()
+        .manage(config)
         .mount(
             "/",
             routes![
