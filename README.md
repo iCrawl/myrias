@@ -17,7 +17,7 @@ TBD
 ## Endpoints
 
 ### **GET** `/languages`
-List of enabled languages.
+List of enabled languages.  
 Example response:
 
 ```json
@@ -25,9 +25,9 @@ Example response:
 ```
 
 ### **POST** `/create_container`
-Creates a language container (if not already present).
-JSON payload with `language` key.
-The `language` is as in the name of a subfolder in the `languages` directory.
+Creates a language container (if not already present).  
+JSON payload with `language` key.  
+The `language` is as in the name of a subfolder in the `languages` directory.  
 Example payload:
 
 ```json
@@ -35,9 +35,9 @@ Example payload:
 ```
 
 ### **POST** `/eval`
-Evaluate code.
-JSON payload with `language` and `code` keys.
-The `language` is as in the name of a subfolder in the `languages` directory.
+Evaluate code.  
+JSON payload with `language` and `code` keys.  
+The `language` is as in the name of a subfolder in the `languages` directory.  
 Example payload:
 
 ```json
