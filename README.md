@@ -2,6 +2,32 @@
 
 Arbitrary code execution server using Docker //in Rust//.
 
+## Setup
+You have to install [gVisor](https://github.com/google/gvisor) as a runtime for docker to provide an additional isolation boundary between the containers and the host kernel.
+
+`/etc/docker/daemon.json`:
+```json
+{
+    "runtimes": {
+        "runsc": {
+            "path": "/usr/local/bin/runsc",
+            "runtimeArgs": [
+                "--network=none",
+                "--overlay"
+            ]
+        },
+        "runsc-kvm": {
+            "path": "/usr/local/bin/runsc",
+            "runtimeArgs": [
+                "--platform=kvm",
+                "--network=none",
+                "--overlay"
+            ]
+        }
+    }
+}
+```
+
 ## Installation
 [Archives of precompiled binares for Myrias will be available for Windows, macOS and Linux.](https://github.com/iCrawl/myrias/releases)
 

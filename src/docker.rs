@@ -16,6 +16,7 @@ impl Docker {
     pub fn start_container(language: &str) {
         Docker::exec(&[
             "run",
+            "--runtime=runsc",
             "--rm",
             &format!("--name=myrias_{}", language),
             "-u1000:1000",
