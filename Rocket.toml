@@ -1,0 +1,7 @@
+[development]
+address = "localhost"
+port = 7200
+
+[production]
+address = "localhost"
+port = 7200

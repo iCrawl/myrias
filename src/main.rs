@@ -1,7 +1,7 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
 use myrias::{router, Config};
-use rocket::routes;
+use rocket::{catchers, routes};
 
 fn main() {
     std::env::set_var("ROCKET_CLI_COLORS", "off");
@@ -9,6 +9,11 @@ fn main() {
 
     rocket::ignite()
         .manage(config)
+        .register(catchers![
+            router::not_found::index,
+            router::gateway_timeout::index,
+            router::internal_server_error::index
+        ])
         .mount(
             "/",
             routes![
