@@ -14,9 +14,8 @@ impl Docker {
     }
 
     pub fn start_container(language: &str) {
-        Docker::exec(&[
+        let args = &[
             "run",
-            "--runtime=runsc",
             "--rm",
             &format!("--name=myrias_{}", language),
             "-u1000:1000",
@@ -28,6 +27,11 @@ impl Docker {
             "--memory-swap=128m",
             &format!("myrias_{}:latest", language),
             "/bin/sh",
-        ]);
+        ];
+
+        #[cfg(target_os = "linux")]
+        args.insert(1, "--runtime=runsc".to_string());
+
+        Docker::exec(args);
     }
 }
