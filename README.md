@@ -2,7 +2,7 @@
 
 Arbitrary code execution server using Docker //in Rust//.
 
-## Setup
+## Setup (Linux only)
 You have to [install](https://gvisor.dev/docs/user_guide/docker/) [gVisor](https://github.com/google/gvisor) as a runtime for docker to provide an additional isolation boundary between the containers and the host kernel.
 
 ```sh
