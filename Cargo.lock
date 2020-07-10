@@ -481,7 +481,7 @@ version = "0.1.0"
 dependencies = [
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "rocket 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "rocket_contrib 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rocket_contrib 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustflake 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.104 (registry+https://github.com/rust-lang/crates.io-index)",
  "toml 0.5.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -723,7 +723,7 @@ dependencies = [
 
 [[package]]
 name = "rocket_contrib"
-version = "0.4.2"
+version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1154,7 +1154,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum redox_syscall 0.1.56 (registry+https://github.com/rust-lang/crates.io-index)" = "2439c63f3f6139d1b57529d16bc3b8bb855230c8efcc5d3a896c8bea7c3b1e84"
 "checksum rocket 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)" = "6130967b369cfb8411b0b73e96fcba1229c32a9cc6f295d144f879bfced13c6e"
 "checksum rocket_codegen 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)" = "cb852e6da168fb948a8f2b798ba2e2f0e4fc860eae0efa9cf2bf0f5466bb0425"
-"checksum rocket_contrib 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)" = "e0fa5c1392135adc0f96a02ba150ac4c765e27c58dbfd32aa40678e948f6e56f"
+"checksum rocket_contrib 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)" = "e3946ca815127041d8f64455561031d058c22ae1b135251502c5ea523cf9e14b"
 "checksum rocket_http 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)" = "1aff5a5480175f2f553a876b251e9350c74196128806d176da3a51c82aab5428"
 "checksum rustc_version 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)" = "138e3e0acb6c9fb258b19b67cb8abd63c00679d2851805ea151465464fe9030a"
 "checksum rustflake 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "3fd2a23c7b59744081b34eadc799cda78e9471f333fe265c1dae05ab70d5ac94"
