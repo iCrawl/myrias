@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 rocket = "0.4.7"
-serde = { version = "1.0.123", features = ["derive"] }
+serde = { version = "1.0.124", features = ["derive"] }
 log = "0.4.14"
 rustflake = "0.1.1"
 toml = "0.5.8"
