@@ -11,7 +11,7 @@ rocket = "0.4.10"
 serde = { version = "1.0.136", features = ["derive"] }
 log = "0.4.16"
 rustflake = "0.1.1"
-toml = "0.5.8"
+toml = "0.5.9"
 
 [dependencies.rocket_contrib]
 version = "0.4.10"
